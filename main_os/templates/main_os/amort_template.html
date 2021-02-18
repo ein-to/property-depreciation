@@ -1,0 +1,9 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+    <title>Амортизация</title>
+<div class="div_format">
+  <h2>Амортизация:</h2>
+  <p></p>
+  <a href="{% url 'amortizacia' %}" class="c">Произвести амортизацию за {{ month }} {{ year }}</a></div>
+{% endblock %}

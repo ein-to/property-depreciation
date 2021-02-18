@@ -1,0 +1,59 @@
+{% extends 'main_os/wrapper.html' %}
+{% load main_os_tags %}
+{% block content %}
+ <title>Карточки сотрудников</title>
+<div class="div_format">
+  <form action="{% url 'cards' %}" method="get">
+    <select name="dropdown" class="select-css">
+      {% if e_id %}
+      <option selected value="{{ e_id }}">{{ s }}</option>
+      {% endif %}
+      {% for e in emp %}
+          <option value="{{ e.emp_id }}">{{ e.surname }} {{ e.name }} {{ e.lastname }}</option>
+      {% endfor %}
+      </select>
+      <button type="submit" class="btn-css">Показать</button>
+    </form>
+        <p>Карточка получения материальных ценностей</p>
+    <p>ФИО: {{ s }}</p>
+    <p>Подразделение: {{ otdel }}</p>
+    <table class="table1">
+      <caption1>{{ caption }}</caption1>
+      <tr>
+        <th>Инвентарный номер</th>
+        <th>Наименование</th>
+        <th>Группа ОС или МБП</th>
+        <th>Дата</th>
+        <th>Примечание</th>
+      </tr>
+      {% if m %}
+        {% for i in m  %}
+          <tr>
+            <td>{{ i.inv|add_zeros_inv }}</td>
+            <td>{{ i.name }}</td>
+            <td>{% if i.type_id == 1 %}МБП{% else %}ОС{% endif %}</td>
+            <td>{{ i.3 }}</td>
+            <td>{{ i.4 }}</td>
+            {% if ch == 1 %}
+              <td class="non-border" align="center"><a class="btn-css" href="{% url 'cards_del_item' i.inv %}">Удалить</a></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        {% endif %}
+      </table><Br>
+      {% if ch == 1 %}<p>Добавить в карточку:</p>
+      <form action="{% url 'cards_add_item' %}" method="get">
+         <input type="text "placeholder="инвентарный номер" name="inv_item" class="btn-css" required>
+         <button type="submit" class="btn-css">Добавить</button>
+       </form><Br><Br>
+      {% endif %}
+
+    {% if ch == 0 %}
+    <a class="btn-css" href="{% url 'cards_pdf' %}">Выгрузить PDF</a>
+    <a class="btn-css" href="{% url 'cards_change' %}">Редактировать</a>{% endif %}
+
+    {% if ch == 1 %}
+    <a class="btn-css" href="{% url 'cards' %}">Выйти из режима редактирования</a>
+    {% endif %}
+</div>
+{% endblock %}

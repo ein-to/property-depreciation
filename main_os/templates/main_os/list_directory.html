@@ -1,0 +1,89 @@
+
+{% extends 'main_os/wrapper.html' %}
+{% load static %}
+{% block content %}
+
+
+    <title>Справочник</title>
+<div class="div_format">
+  {% if id == 1 %}
+    <p><a class="btn-css" href="{% url 'directory_list_add' 1 %}">Добавить сотрудника</a></p>
+    <table class="table1">
+      <caption1>{{ caption }}</caption1><Br>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+      </tr>
+      {% for i in m %}
+      <tr><td>{{ i.surname }}</td><td>{{ i.name }}</td><td>{{ i.lastname }}</td>
+          <td class="non-border" align="center"><a class="btn-css" href="{% url 'employee_change' i.emp_id %}">Изменить</a></td>
+        <td class="non-border" align="center"><a class="btn-css" href="{% url 'employee_disable' i.emp_id %}">Деактивировать</a></td></tr>
+      {% endfor %}
+    {% endif %}
+    {% if id == 2 %}
+      <p><a class="btn-css" href="{% url 'directory_list_add' 2 %}">Добавить подразделение</a></p><Br>
+      <table class="table3">
+        <caption1>{{ caption }}</caption1><Br>
+        <tr>
+          <th>Наименование</th>
+        </tr>
+        {% for i in m %}
+        <tr><td>{{ i.name }}</td>
+        <td class="non-border" align="center"><a class="btn-css" href="{% url 'depart_change' i.depart_id %}">Изменить</a></td>
+        <td class="non-border" align="center"><a class="btn-css" href="{% url 'depart_disable' i.depart_id %}">Удалить</a></td></tr>
+        {% endfor %}
+    {% endif %}
+    {% if id == 3 %}
+    <p><a class="btn-css" href="{% url 'directory_list_add' 3 %}">Добавить точку обслуживания</a></p><Br>
+    <table class="table1">
+      <caption1>{{ caption }}</caption1><Br>
+      <tr>
+        <th>Наименование</th>
+      </tr>
+      {% for i in m %}
+      <tr><td>{{ i.name }}</td></tr>
+      {% endfor %}
+  {% endif %}
+  {% if id == 4 %}
+  <p><a class="btn-css" href="{% url 'directory_list_add' 4 %}">Добавить поставщика</a></p><Br>
+  <table class="table1">
+    <caption1>{{ caption }}</caption1><Br>
+    <tr>
+      <th>Наименование</th>
+    </tr>
+    {% for i in m %}
+    <tr><td>{{ i.name }}</td></tr>
+    {% endfor %}
+{% endif %}
+   </table>
+   {% if m.paginator.num_pages > 1 %}
+
+       {% if m.has_previous %}
+
+           <a href="?page={{ m.previous_page_number }}" class="btn btn-secondary mt-4"> Предыдущая </a>
+
+       {% endif %}
+
+      {% for num in m.paginator.page_range %}
+
+           {% if m.number == num %}
+               <a class="btn btn-secondary mt-4" href="?page={{ num }}">{{ num }}</a>
+           {% elif num > m.number|add:'-3' and num < m.number|add:'3' %}
+               <a class="btn btn-outline-secondary mt-4" href="?page={{ num }}">{{ num }}</a>
+
+           {% endif %}
+
+       {% endfor %}
+
+       {% if m.has_next %}
+
+           <a href="?page={{ m.next_page_number }}" class="btn btn-secondary mt-4"> Следующая </a>
+
+       {% endif %}
+
+   {% endif %}
+
+    <p><span> Страница {{ m.number }} из {{ m.paginator.num_pages }} </span></p>
+ </div>
+
+{% endblock %}

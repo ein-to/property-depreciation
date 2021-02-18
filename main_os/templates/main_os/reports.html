@@ -1,0 +1,99 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+    <title>Отчеты</title>
+  <div class="div_format">
+  <p>{{ title }}</p>
+
+  {% if id == 1 %}
+    <form action="report" method="post">
+      {% csrf_token %}
+        <p>Вид основных средств:<Br>
+        <select name="dropdown" class="select-css">
+            <!--<option value="1" hidden>МБП</option>-->
+            <option value="2">Мебель</option>
+            <option value="3">Компьютерное оборудование</option>
+            <option value="4">Транспорт</option>
+            <option value="5">Капиталовложение</option>
+            <option value="6">Нематериальные активы</option>
+            <option value="7">Оборудование</option>
+            <option value="8">Здания</option>
+          </select>
+          <p>Отделение/Подразделение:<Br>
+            <select name="dropdown2" class="select-css">
+            <option value="0">Все</option>
+              {% for b in br %}
+            <option value="{{ b.branch_id }}">{{ b.name }}</option>
+            {% endfor %}
+            </select></p>
+          <p><label for="month">Месяц и год: </label></p>
+          <input type="month" id="month" name="month" class="input-css"/>
+          <button type="submit" class="btn-css">Сформировать</button>
+        </form>
+      {% endif %}
+
+      {% if id == 2 %}
+      <form action="report_general" method="post">
+        {% csrf_token %}
+          <p>Вид основных средств:<Br>
+          <select name="dropdown" class="select-css">
+              <option value="0">Все</option>
+              <option value="1">МБП</option>
+              <option value="2">Мебель</option>
+              <option value="3">Компьютерное оборудование</option>
+              <option value="4">Транспорт</option>
+              <option value="5">Капиталовложение</option>
+              <option value="6">Нематериальные активы</option>
+              <option value="7">Оборудование</option>
+              <option value="8">Здания</option>
+            </select><Br>
+            <button type="submit" class="btn-css">Сформировать</button>
+          </form>
+      {% endif %}
+
+      {% if id == 3 %}
+      <form action="report_spis_real" method="post">
+        {% csrf_token %}
+      <p>Вид основных средств:<Br>
+      <select name="dropdown" class="select-css">
+          <option value="0">Все</option>
+          <option value="1">МБП</option>
+          <option value="2">Мебель</option>
+          <option value="3">Компьютерное оборудование</option>
+          <option value="4">Транспорт</option>
+          <option value="5">Капиталовложение</option>
+          <option value="6">Нематериальные активы</option>
+          <option value="7">Оборудование</option>
+          <option value="8">Здания</option>
+        </select>
+        <!--<p>Отделение/Подразделение:<Br>
+          <select name="dropdown2" class="select-css">
+          <option value="0">Все</option>
+            {% for b in br %}
+          <option value="{{ b.branch_id }}">{{ b.name }}</option>
+          {% endfor %}
+          </select></p>-->
+          <p>Тип списания:<Br>
+            <select name="dropdown3" class="select-css">
+            <option value="0">Все</option>
+              {% for s in spisan %}
+            <option value="{{ s.type_spisan_id }}">{{ s.type_name }}</option>
+            {% endfor %}
+            </select></p>
+        <p><label for="date">С: </label>
+        <input type="date" id="date" name="month_from" class="input-css"/></p>
+        <p><label for="date">По: </label>
+        <input type="date" id="date" name="month_to" class="input-css"/></p>
+        <button type="submit" class="btn-css">Сформировать</button>
+      </form></div>
+      {% endif %}
+
+      {% if id == 4 %}
+      <form action="report_prbo" method="post">
+        {% csrf_token %}
+        <input type="month" id="month" name="month" class="input-css"/>
+        <button type="submit" class="btn-css">Сформировать</button>
+      </form></div>
+      {% endif %}
+
+{% endblock %}

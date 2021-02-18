@@ -1,0 +1,37 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+    <title>Сотрудники</title>
+    <div class="div_format">
+      <h4>{{ message }}</h4><Br>
+    {% if id == 1 %}
+    <form action="{% url 'directory_list_add' 1 %}" method="post">
+      {% csrf_token %}
+      <p>Фамилия:  <input type="text" name="add_surname" class="btn-css"></p>
+      <p>Имя:      <input type="text" name="add_name" class="btn-css"></p>
+      <p>Отчество: <input type="text" name="add_lastname" class="btn-css"></p>
+      <p>Отделение/Подразделение:<Br>
+        <select name="dropdown" class="select-css">
+          {% for d in departs %}
+        <option value="{{ d.depart_id }}">{{ d.name }}</option>
+        {% endfor %}
+        </select></p>
+      <p><button type="submit" class="btn-css">Добавить</button></p></form>
+    <a class="btn-css" href="{% url 'directory_list' id=1 %}">Вернуться к списку сотрудников</a>
+    {% endif %}
+    {% if id == 2 %}
+    <form action="{% url 'directory_list_add' 2 %}" method="post">
+      {% csrf_token %}
+      <p>Название:  <input type="text" name="add_depart" class="btn-css"></p>
+      <p><button type="submit" class="btn-css">Добавить</button></p></form>
+    <a class="btn-css" href="{% url 'directory_list' 2 %}">Вернуться к списку подразделений</a>
+    {% endif %}
+    {% if id == 3 %}
+    <form action="{% url 'directory_list_add' 3 %}" method="post">
+      {% csrf_token %}
+      <p>Название:  <input type="text" name="add_branch" class="btn-css"></p>
+      <p><button type="submit" class="btn-css">Добавить</button></p></form>
+    <a class="btn-css" href="{% url 'directory_list' 3 %}">Вернуться к списку точек обслуживания</a>
+    {% endif %}
+  </div>
+{% endblock %}

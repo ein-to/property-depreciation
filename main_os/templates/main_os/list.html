@@ -1,0 +1,76 @@
+
+{% extends 'main_os/wrapper.html' %}
+{% load static %}
+{% load main_os_tags %}
+{% block content %}
+    <title>Основные средства</title>
+  <div class="container">
+  <form action="{% url 'search' %}" method="get">
+      <input type="text "placeholder="" name="search" class="btn-css" required>
+      <button type="submit" class="btn-css">Поиск</button>
+    </form><br>
+  <table class="table1">
+   <caption1>{{ caption }}</caption1>
+   <tr>
+    <th>Дата приобретения</th>
+    <th>Инвентарный номер</th>
+    <th>Наименование</th>
+    <th>Срок полезной службы</th>
+    <th>Ежемесячная норма амортизации</th>
+    <th>Балансовая стоимость</th>
+    <th>Накопленная амортизация</th>
+    <th>Остаточная стоимость</th>
+    <th>Тип</th>
+    <!--<th>Поставщик</th>-->
+    <th>Точка обслуживания</th>
+    <th>Сотрудник</th>
+    <th>Дата списания/реализации</th>
+    <!--<th>Сотрудник</th>-->
+   </tr>
+
+   {{ s }}
+   {% for i in m  %}
+   <tr><td>{{ i.0 }}</td><td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td><td>{{ i.4 }}</td>
+   <td>{{ i.5 }}</td><td>{{ i.6 }}</td><td>{{ i.7 }}</td><td>{{ i.8 }}</td><td>{{ i.9 }}</td><td>{{ i.1|show_emp_name }}</td><td>{{ i.1|show_spisan_date }}</td></tr>
+
+   <!--<tr><td>{{ i.date_vvod|date:"d-m-Y" }}</td><td>{{ i.inv }}</td><td>{{ i.name }}</td><td>{{ i.amort_month|floatformat:"0" }}</td><td>{{ i.amort_sum_month|floatformat:2 }}</td>
+   <td>{{ i.bal_price|floatformat:2 }}</td><td>{{ i.amort_sum|floatformat:2 }}</td><td></td><td></td><td></td><td></td><td></td></tr>-->
+   {% endfor %}
+
+   {% if m.has_next %}
+   {% else %}
+   <tr><td></td><td></td><td></td><td></td><td>{{ sum_amort_sum_month }}</td>
+   <td>{{ sum_bal_price }}</td><td>{{ sum_amort_sum }}</td><td>{{ sum_ost_sum }}</td><td></td><td></td></tr>
+   {% endif %}
+   </table>
+
+   {% if m.paginator.num_pages > 1 %}
+
+       {% if m.has_previous %}
+
+           <a href="?page={{ m.previous_page_number }}" class="btn btn-secondary mt-4"> Предыдущая </a>
+
+       {% endif %}
+
+      {% for num in m.paginator.page_range %}
+
+           {% if m.number == num %}
+               <a class="btn btn-secondary mt-4" href="?page={{ num }}">{{ num }}</a>
+           {% elif num > m.number|add:'-3' and num < m.number|add:'3' %}
+               <a class="btn btn-outline-secondary mt-4" href="?page={{ num }}">{{ num }}</a>
+
+           {% endif %}
+
+       {% endfor %}
+
+       {% if m.has_next %}
+
+           <a href="?page={{ m.next_page_number }}" class="btn btn-secondary mt-4"> Следующая </a>
+
+       {% endif %}
+
+   {% endif %}
+
+    <p><span> Страница {{ m.number }} из {{ m.paginator.num_pages }} </span></p>
+</div>
+{% endblock %}

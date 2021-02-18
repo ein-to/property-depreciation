@@ -1,0 +1,30 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+<title>Списание/Реализация основного средства: </title>
+
+
+    <div class="div_format">
+    <form action="{% url 'def_spis_real' %}" method="post">
+    {% csrf_token %}
+    <p>Тип:<Br>
+      <select name="dropdown" class="select-css">
+        {% for e in type %}
+      <option value="{{ e.type_spisan_id }}">{{ e.type_name }}</option>
+      {% endfor %}
+      </select></p>
+
+      <p>Инвентарный номер:<Br>
+      <input placeholder=" " name="inv_num" class="btn-css"></p>
+
+      <p>Дата списания/реализации:<Br>
+        <input type="date" id="date" name="date" class="btn-css"/>
+      </p>
+
+      <p>Описание:<Br>
+        <textarea name="comment" cols="40" rows="3" class="btn-css"></textarea></p>
+
+      <p><button type="submit" class="btn-css">ОК</button></p>
+  </form></div>
+
+{% endblock %}
