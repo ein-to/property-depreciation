@@ -1,0 +1,31 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+    <title>Сотрудники</title>
+
+    <div class="div_format">
+      {% if flag == 1 %}
+      <h4>{{ message }}</h4><Br>
+    <form action="{% url 'employee_change' emp_id %}" method="get">
+      <p><input type="text" value="{{ emp_surname }}" name="change_surname" class="btn-css"></p>
+      <p><input type="text" value="{{ emp_name }}" name="change_name" class="btn-css"></p>
+      <p><input type="text" value="{{ emp_lastname }}" name="change_lastname" class="btn-css"></p>
+      <p>Отделение/Подразделение:<Br>
+        <select name="dropdown" class="select-css">
+          <option selected value="{{ dep_id }}">{{ dep_name }}</option>
+          {% for d in departs %}
+        <option value="{{ d.depart_id }}">{{ d.name }}</option>
+        {% endfor %}
+        </select></p>
+      <p><button type="submit" class="btn-css">Сохранить</button></p></form>
+      <a class="btn-css" href="{% url 'directory_list' id=1 %}">Вернуться к списку сотрудников</a>
+      {% endif %}
+      {% if flag == 2 %}
+      <h4>{{ message }}</h4><Br>
+    <form action="{% url 'depart_change' id %}" method="get">
+      <p><input type="text" value="{{ dep_name }}" name="change_dep_name" class="btn-css"></p>
+      <p><button type="submit" class="btn-css">Сохранить</button></p></form>
+      <a class="btn-css" href="{% url 'directory_list' id=2 %}">Вернуться к списку подразделений</a>
+      {% endif%}
+    </div>
+{% endblock %}

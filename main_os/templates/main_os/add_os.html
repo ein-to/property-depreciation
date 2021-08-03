@@ -1,0 +1,45 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+
+    <title>Добавление основных средств</title>
+    <div class="div_format">
+    <form action="{% url 'add_os_finish' %}" method="post">
+    {% csrf_token %}
+      <p>Наименование основного средства:<Br>
+        <textarea name="name_os" cols="40" rows="3" class="btn-css" required></textarea></p>
+      <p>Дата приобретения:<Br>
+        <input type="date" id="date" name="date" class="btn-css" required/>
+      </p>
+      <p>Балансовая стоимость:<Br>
+      <input placeholder="Введите сумму" name="bal_price_os" type="number" step="any" min="0" class="btn-css" required></p>
+
+      <p>Тип:<Br>
+        <select name="dropdown" class="select-css" required>
+        <option value="1">МБП</option>
+        <option value="2">Мебель</option>
+        <option value="3">Компьютерное оборудование</option>
+        <option value="4">Транспорт</option>
+        <option value="5">Капиталовложение</option>
+        <option value="6">Нематериальные активы</option>
+        <option value="7">Оборудование</option>
+        <option value="8">Здания</option>
+        </select></p>
+
+      <p>Срок эксплуатации в месяцах:<Br>
+      <input placeholder="Введите срок" name="srok" class="btn-css" required></p>
+
+      <p>Дата ввода в эксплуатацию:<Br>
+        <input type="date" id="date" name="date_vvod" class="btn-css" required/>
+      </p>
+
+      <p>Отделение/Подразделение:<Br>
+        <select name="dropdown2" class="select-css" required>
+          {% for b in br %}
+        <option value="{{ b.branch_id }}">{{ b.name }}</option>
+        {% endfor %}
+        </select></p>
+
+      <p><button type="submit" class="btn-css">Принять</button></p></form></div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'main_os/wrapper.html' %}
+{% load main_os_tags %}
+{% block content %}
+ <title>История передвижений</title>
+<div class="div_format1">
+  <form action="{% url 'get_history_item' %}" method="get">
+    <p>Инвентарный номер:<input type="text" name="inv" class="btn-css" placeholder="{{ inv }}"></p>
+    <p><button type="submit" class="btn-css">Показать</button></p>
+  </form>
+  {% if flag == 1 %}
+  <table class="table1">
+    <caption1>{{ caption }}</caption1>
+    <tr>
+      <th>Дата</th>
+      <th>Инвентарный номер</th>
+      <th>Наименование</th>
+      <th>От</th>
+      <th>Кому</th>
+      <th>Исполнитель</th>
+      <th>Накладная №</th>
+    </tr>
+    {% for i in h  %}
+      <tr>
+        <td>{{ i.date_moving|date_format }}</td>
+        <td>{{ i.inv|add_zeros_inv }}</td>
+        <td>{{ i.name_item }}</td>
+        <td>{{ i.ex_emp|get_name }}</td>
+        <td>{{ i.new_emp|get_name }}</td>
+        <td>{{ i.username }}</td>
+        <td>{{ i.invoice_number }}</td>
+      </tr>
+    {% endfor %}
+ </table>
+  {% endif %}
+</div>
+{% endblock %}

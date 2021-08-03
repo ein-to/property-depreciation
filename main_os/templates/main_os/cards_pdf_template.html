@@ -1,0 +1,88 @@
+{% load static %}
+{% load main_os_tags %}
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="{% static 'main_os/css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+  <title>Карточка сотрудника</title>
+  <style>
+
+  .table1 {
+    border-spacing: 0px;
+    border-collapse: collapse;
+  }
+
+  .table1 td {
+    border: 1px solid black;
+    text-align: center;
+    border-spacing: 0px;
+  }
+
+  .table1 th {
+    border: 1px solid black;
+    text-align: center;
+    border-spacing: 0px;
+    /*font-weight: bold;*/
+  }
+
+  .non-border {
+    border: none;
+    margin-top: 30px;
+  }
+
+  .non-border td1 {
+    margin-left: 30px;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+.w {
+  width: 80px;
+}
+
+.w1 {
+  width: 100px;
+}
+  </style>
+ </head>
+ <body>
+   <header>
+   </header>
+   <h3>Карточка материальных ценностей</h3>
+   <p>Дата: {{ date }}</p>
+   <p>ФИО: {{ s }}</p>
+   <p>Подразделение: {{ otdel }}</p>
+   <table class="table1">
+     <caption1>{{ caption }}</caption1>
+     <tr>
+       <th class="w1">Инвентарный номер</th>
+       <th>Наименование</th>
+       <th>Группа ОС или МБП</th>
+       <th class="w">        Дата        </th>
+       <th>Примечание</th>
+     </tr>
+
+     {% for i in m  %}
+       <tr><td>{{ i.inv|add_zeros_inv }}</td><td>{{ i.name }}</td><td>{% if i.type_id == 1 %}МБП{% else %}ОС{% endif %}</td><td>{{ i.3 }}</td><td>{{ i.4 }}</td></tr>
+     {% endfor %}
+  </table>
+  <table class="non-border">
+      <tr><td>Подтверждаю: ____________________ {{ s }} </td><td></td><td></td></tr>
+      <!--<tr><td>Начальник ОИТ Токтомамбетов Э.Э._______________</td><td></td><td></td></tr>
+      <tr><td>Начальник АХО Эргашев Р.З._____________________</td><td></td><td></td></tr><Br>
+      <tr><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td></tr>
+      <tr><td>Принял:</td><td></td><td></td></tr>
+      <tr><td>{{ s }} __________________</td><td></td><td></td></tr>-->
+ </table>
+  <footer>
+    <script type="text/javascript" src="{% static 'bootstrap/css/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+  </footer>
+ </body>
+</html>

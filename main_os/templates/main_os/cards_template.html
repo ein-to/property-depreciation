@@ -1,0 +1,170 @@
+{% extends 'main_os/wrapper.html' %}
+{% load main_os_tags %}
+{% block content %}
+ <title>Карточки сотрудников</title>
+
+<div class="div_format">
+  <form action="{% url 'cards' %}" method="get">
+    <select name="dropdown" class="select-css">
+      {% if e_id %}
+      <option selected value="{{ e_id }}">{{ s }}</option>
+      {% endif %}
+      {% for e in emp %}
+          <option value="{{ e.emp_id }}">{{ e.surname }} {{ e.name }} {{ e.lastname }}</option>
+      {% endfor %}
+      </select><Br>
+      <button type="submit" class="btn-css">Показать</button>
+    </form><Br>
+        <p>Карточка получения материальных ценностей</p>
+    <p>ФИО: {{ s }}</p>
+    <p>Подразделение: {{ otdel }}</p>
+</div>
+  <div class="row margin-left-10">
+    <div class="col w30">
+    <table class="table1">
+      <caption1>{{ caption }}</caption1>
+      <tr>
+        <th>Инвентарный номер</th>
+        <th>Наименование</th>
+        <th>Группа ОС или МБП</th>
+        <th>Дата</th>
+        <th>Примечание</th>
+      </tr>
+      {% if m %}
+        {% for i in m  %}
+          <tr>
+            <td>{{ i.inv|add_zeros_inv }}</td>
+            <td>{{ i.name }}</td>
+            <td>{% if i.type_id == 1 %}МБП{% else %}ОС{% endif %}</td>
+            <td>{{ i.3 }}</td>
+            <td>{{ i.4 }}</td>
+            {% if ch == 1 %}
+              <!--<td class="non-border" align="center"><a class="btn-css" href="{% url 'cards_del_item' i.inv %}">Удалить</a></td>-->
+            <td class="non-border"><button class="btn-css" onclick="move_forward({{ i.inv }})">></button></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        {% endif %}
+      </table><Br>
+      {% if ch == 1 %}<p>Добавить в карточку:</p>
+      <form action="{% url 'cards_add_item' %}" method="get">
+         <input type="text "placeholder="инвентарный номер" name="inv_item" class="btn-css" required>
+         <button type="submit" class="btn-css">Добавить</button>
+       </form><Br><Br>
+      {% endif %}
+
+    {% if ch == 0 %}
+    <a class="btn-css" href="{% url 'cards_pdf' %}">Выгрузить PDF</a>
+    <a class="btn-css" href="{% url 'cards_change' %}">Редактировать</a>{% endif %}
+
+    {% if ch == 1 %}
+    <a class="btn-css" href="{% url 'cards' %}">Выйти из режима редактирования</a>
+    {% endif %}
+ </div>
+  {% if ch == 1 %}
+ <div id='inv' class="col w30">
+   <b>Передача ОС (Инвентарный номер)</b>
+ </div>
+
+ <div class="col w30">
+   <b>Получатель:</b>
+   <!--<form action="{% url 'test' %}" method="get">
+     <select name="dropdown" class="select-css">
+       {% for e in emp %}
+           <option value="{{ e.emp_id }}">{{ e.surname }} {{ e.name }} {{ e.lastname }}</option>
+       {% endfor %}
+       </select><Br>
+       <button type="submit" class="btn-css" id="commit_moves">Передать</button>
+     </form>-->
+  <select name="dropdown" class="select-css" id="emp">
+   {% for e in emp %}
+     <option value="{{ e.emp_id }}">{{ e.surname }} {{ e.name }} {{ e.lastname }}</option>
+   {% endfor %}
+   </select><Br>
+  <button type="button" class="btn-css" id="commit_moves" onclick="commit_moves()">Передать</button>
+ </div>
+ {% endif %}
+</div>
+
+
+
+<script>
+  var inv_list = [];
+
+  function move_forward(inv) {
+    const inv_n = document.createElement('em');
+    inv_n.setAttribute('id', inv);
+    var br = document.createElement('br');
+    //br.setAttribute('name', inv);
+    var button = document.createElement('button');
+    button.setAttribute('class', 'btn-css');
+    button.setAttribute('value', inv);
+    button.setAttribute('name', inv);
+    button.setAttribute('onclick', 'move_back(this.value)');
+    button.setAttribute('style', 'margin-left: 50px;');
+    button.textContent = 'X';
+    str_inv = inv.toString();
+    inv_n.innerHTML = str_inv.padStart(8,'0');
+    inv_list.push(inv);
+    document.querySelector('#inv').append(br);
+    document.querySelector('#inv').append(inv_n);
+    document.querySelector('#inv').append(button);
+    console.log(inv_list);
+    return false;
+  }
+
+  function move_back(val) {
+    //console.log(val);
+    var inv = document.getElementById(val);
+    var b = document.getElementsByName(val);
+    console.log(b);
+    for (var i=0; i < inv_list.length; i++){
+      if (inv_list[i]===Number(val)) {
+        var c = inv_list.splice(i,1);
+        //console.log(c);
+        i--;
+      }
+    }
+    //console.log(inv_list)
+    inv.parentNode.removeChild(inv);
+    for (const elem of b) {
+      elem.remove();
+    //var tag = document.getElementsByTagName('Br');
+    //while (tag[0]) tag[0].parentNode.removeChild(tag[0]);
+    }
+  }
+
+
+
+    var token = '{{csrf_token}}';
+    function commit_moves() {
+      //let username = 'qwe';
+      emp_id = document.getElementById('emp').value;
+      //console.log(emp_id);
+      //console.log(inv_list);
+      $.ajax({
+        headers: { "X-CSRFToken": token },
+        type:"POST",
+        url:"{% url 'item_movement' %}",
+        data:{emp_id:emp_id, list:inv_list},//**I want pass the arr to django**
+        success: function(response) {
+          alert(response);
+          for (var i=0; i < inv_list.length; i++){
+            var inv = document.getElementById(inv_list[i]);
+            inv.parentNode.removeChild(inv);
+            var b = document.getElementsByName(inv_list[i]);
+            for (const elem of b) {
+              elem.remove();
+            }
+          }
+          inv_list = [];
+          window.location.reload();
+          },
+        error: function(response) {
+          alert(response);
+          },
+      });
+    }
+</script>
+
+{% endblock %}

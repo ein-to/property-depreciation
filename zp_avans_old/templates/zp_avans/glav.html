@@ -1,0 +1,15 @@
+{% extends 'zp_avans/wrapper.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Главная страница</title>
+</head>
+<body class="container">
+  <a href = "{% url 'avans' %}">Ведомость аванса</a>
+  <a href = "{% url 'zp' %}">Ведомость заработной платы</a>
+</body>
+</html>
+{% endblock %}

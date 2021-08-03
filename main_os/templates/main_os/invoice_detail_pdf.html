@@ -1,0 +1,70 @@
+{% load main_os_tags %}
+{% block content %}
+<style>
+
+.table1 {
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+.table1 td {
+  border: 1px solid black;
+  text-align: center;
+  border-spacing: 0px;
+}
+
+.table1 th {
+  border: 1px solid black;
+  text-align: center;
+  border-spacing: 0px;
+  /*font-weight: bold;*/
+}
+
+.non-border {
+  border: none;
+  margin-top: 30px;
+}
+
+.non-border td1 {
+  margin-left: 30px;
+}
+
+h3 {
+  text-align: center;
+}
+
+.w {
+width: 80px;
+}
+
+.w1 {
+width: 100px;
+}
+</style>
+
+  <title>Накладная</title>
+
+<div class="div_format">
+<p><b>Дата: {{ date|date_format }}</b></p>
+  <p><b>Накладная № {{ invoice_number }}</b></p>
+  <p><table class="table1">
+    <caption1>{{ caption }}</caption1>
+    <tr>
+      <th>Инвентарный №</th>
+      <th>Наименование</th>
+      <th>Дата приобретения</th>
+      <th>Балансовая стоимость</th>
+    </tr>
+  {% for i in invoice %}
+    <tr>
+      <td>{{ i.inv|add_zeros_inv }}</td>
+      <td>{{ i.name_item }}</td>
+      <td>{{ i.id_oborud|pur_date }}</td>
+      <td>{{ i.id_oborud|bal_price }}</td>
+    </tr>
+  {% endfor %}
+  </table></p><br>
+  <p>Передал: ___________________________ {{ ex_emp|get_name }}</p>
+  <p>Принял:  ___________________________ {{ new_emp|get_name }}</p>
+</div>
+{% endblock %}

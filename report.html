@@ -1,0 +1,19 @@
+{% extends 'scoring/wrapper.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<p>Скоринг оценка: <strong>{{ k }}</strong></p>
+<table>
+        <tr><th>Фамилия</th><th>Имя</th><th>Отчество</th></tr>
+        <ul>
+                <tr>
+                <td>{{ fam }}</td><td>{{ name }}</td><td>{{ otch }}</td>
+                </tr>
+
+
+        </ul>
+</table>
+
+</html>
+{% endblock %}

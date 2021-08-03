@@ -1,0 +1,31 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Изменение стоимости</title>
+</head>
+<body>
+  <p>Увеличение/уменьшение стоимости:<Br>
+    <form action="change_bal_price_def" method="post">
+    {% csrf_token %}
+      <p><select name="dropdown">
+        <option value="1">Увеличение</option>
+        <option value="2">Уменьшение</option>
+      </select></p>
+      <p>Дата:<Br>
+        <input type="date" id="date" name="date"/>
+      </p>
+      <p>Инвентарный номер:<Br>
+      <input placeholder="Введите инвентарный номер" name="inv_num"></p>
+      <p>Сумма увеличения/уменьшения:<Br>
+      <input placeholder="Введите сумму" name="change_sum"></p>
+      <p>Описание:<Br>
+        <textarea name="comment" cols="40" rows="10"></textarea></p>
+    <button type="submit">Принять</button>
+  </form>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="{% static 'main_os/css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'bootstrap/css/Login-Form-Dark.css' %}" />
+  <link rel="stylesheet" href="{% static 'bootstrap/css/Navigation-Clean.css' %}" />
+  <title>Основные средства Чанг Ан</title>
+ </head>
+ <body>
+   <header>
+     <a href="{% url 'index' %}"><img src="{% static 'bootstrap/img/logo_rus2.png' %}"></a>
+
+           {% if user.is_authenticated %}
+           <div class="logout">
+           <a href="{% url 'logout_request' %}" class="btn btn-secondary">Выйти</a></div>
+           {% endif %}
+     <nav>
+        <ul class="nav">
+          <li class="dropdown">
+            <a href="/os" onclick="return false">Справочник</a>
+            <ul>
+              <li><a href="{% url 'directory_list' id=1 %}">Сотрудники</a></li>
+              <li><a href="{% url 'directory_list' id=2 %}">Отделы</a></li>
+              <li><a href="{% url 'directory_list' id=3 %}">Точки обслуживания</a></li>
+              <li><a href="{% url 'directory_list' id=4 %}">Поставщики</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="index.html" onclick="return false">Основные средства</a>
+            <ul class="large">
+              <li><a href="{% url 'mbp' %}">МБП</a></li>
+              <li><a href="{% url 'mebel' %}">Мебель</a></li>
+              <li><a href="{% url 'comp' %}">Компьютерное оборудование</a></li>
+              <li><a href="{% url 'transport' %}">Транспорт</a></li>
+              <li><a href="{% url 'cap' %}">Капиталовложение</a></li>
+              <li><a href="{% url 'nem_actives' %}">Нематериальные активы</a></li>
+              <li><a href="{% url 'oborudovanie' %}">Оборудование</a></li>
+              <li><a href="{% url 'zdaniya' %}">Здания</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="/os" onclick="return false">Ведомость</a>
+            <ul>
+              <li><a href="{% url 'reports' id=1 %}">Ведомость амортизации</a></li>
+              <li><a href="{% url 'reports' id=2 %}">Ведомость общая</a></li>
+              <li><a href="{% url 'reports' id=3 %}">Ведомость списания/реализации</a></li>
+              <li><a href="{% url 'reports' id=4 %}">ПРБО ОС</a></li>
+            </ul>
+          </li>
+
+          <li class="dropdown">
+            <a href="/os" onclick="return false">Операции</a>
+            <ul>
+              <li><a href="{% url 'add_os' %}">Добавление основного средства</a></li>
+              <li><a href="{% url 'ch_bal_price' %}">Увеличение/Уменьшение стоимости</a></li>
+              <li><a href="{% url 'spis_real' %}">Реализация/Списание основных средств</a></li>
+              <li><a href="{% url 'amort_template' %}">Амортизация</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="/os" onclick="return false">Карточки сотрудников</a>
+            <ul>
+              <li><a href="{% url 'cards' %}">Карточки сотрудников</a></li>
+              <li><a href="{% url 'invoice' %}">Накладные</a></li>
+              <li><a href="{% url 'get_history_item' %}">История передвижений</a></li>
+            </ul>
+          </li>
+        </ul>
+
+      </nav>
+
+
+   </header>
+
+   {% block content %}
+   {% endblock %}
+  <footer>
+    <script type="text/javascript" src="{% static 'bootstrap/css/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'main_os/wrapper.html' %}
+{% load main_os_tags %}
+{% block content %}
+
+  <title>Накладная</title>
+
+<div class="div_format">
+<p><b>Дата: {{ date|date_format }}</b></p>
+  <p><b>Накладная № {{ invoice_number }}</b></p>
+  <p><table class="table1">
+    <caption1>{{ caption }}</caption1>
+    <tr>
+      <th>Инвентарный №</th>
+      <th>Наименование</th>
+      <th>Дата приобретения</th>
+      <th>Балансовая стоимость</th>
+    </tr>
+  {% for i in invoice %}
+    <tr>
+      <td>{{ i.inv|add_zeros_inv }}</td>
+      <td>{{ i.name_item }}</td>
+      <td>{{ i.id_oborud|pur_date }}</td>
+      <td>{{ i.id_oborud|bal_price }}</td>
+    </tr>
+  {% endfor %}
+  </table></p>
+  <p>Передал: ___________________________ {{ ex_emp|get_name }}</p>
+  <p>Принял:  ___________________________ {{ new_emp|get_name }}</p>
+  <p><button class='btn-css' type='button' onclick='location.href="{% url 'invoice_pdf' invoice_number %}"'>PDF</button></p>
+</div>
+{% endblock %}

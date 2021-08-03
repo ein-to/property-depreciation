@@ -1,0 +1,7 @@
+*.log
+*.pot
+*.pyc
+__pycache__
+*.sqlite3
+*.xlsx
+site-packages_____домашний/*

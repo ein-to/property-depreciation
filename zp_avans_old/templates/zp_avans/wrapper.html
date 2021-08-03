@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Пример веб-страницы</title>
+ </head>
+ <body>
+   <header>
+    {% include 'zp_avans/header.html' %}
+   </header>
+   {% block content %}
+   {% endblock %}
+  <footer>
+    {% include 'zp_avans/footer.html' %}
+  </footer>
+ </body>
+</html>

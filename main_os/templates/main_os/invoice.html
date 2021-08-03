@@ -1,0 +1,37 @@
+{% extends 'main_os/wrapper.html' %}
+{% load main_os_tags %}
+{% block content %}
+
+  <title>Накладная</title>
+  <div class="div_format">
+    <form action="{% url 'invoice' %}" method="get">
+      <p>Дата накладной:<Br>
+        <input type="date" id="date" name="date" class="btn-css" required/>
+      </p>
+      <p><button type="submit" class="btn-css">Показать</button></p>
+    </form>
+
+
+{% if invoices %}
+  <p><b>Дата: {{ date }}</b></p>
+  <p><b>Накладные</b></p>
+  <p><table class="table1">
+    <caption1>{{ caption }}</caption1>
+    <tr>
+      <th>Накладная №</th>
+      <th>Передал</th>
+      <th>Принял</th>
+    </tr>
+  {% for i in invoices %}
+    <tr>
+      <td>{{ i.invoice_number }}</td>
+      <td>{{ i.ex_emp|get_name }}</td>
+      <td>{{ i.new_emp|get_name }}</td>
+      <td class='non-border'><button class='btn-css' type="button" onclick='location.href="{% url 'invoice_detail' i.invoice_number|ifnull %}"'>Просмотр</button></td>
+    </tr>
+  {% endfor %}
+  </table></p>
+{% endif %}
+  <p>{{ msg }}</p>
+</div>
+{% endblock %}

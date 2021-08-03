@@ -1,0 +1,30 @@
+{% extends 'main_os/wrapper.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Отчеты</title>
+</head>
+<body>
+  <p>Отчеты</p>
+  <form action="report" method="post">
+    {% csrf_token %}
+    <select name="dropdown">
+        <option value="1">МБП</option>
+        <option value="2">Мебель</option>
+        <option value="3">Компьютерное оборудование</option>
+        <option value="4">Транспорт</option>
+        <option value="5">Капиталовложение</option>
+        <option value="6">Нематериальные активы</option>
+        <option value="7">Оборудование</option>
+        <option value="8">Здания</option>
+      </select>
+      <p><label for="month">Месяц и год: </label></p>
+      <input type="month" id="month" name="month"/>
+    <button type="submit">Сформировать</button>
+  </form>
+</body>
+</html>
+{% endblock %}
