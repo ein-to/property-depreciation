@@ -176,8 +176,10 @@ def reports(request, id):
             title = 'Ведомость общая'
         if id == 3:
             title = 'Ведомость списания/реализации'
-        else:
+        if id == '4':
             title = 'Ведомость амортизации основных средств'
+        else:
+            title = 'Ведомость для инвентаризации'
         return render(request, 'main_os/reports.html', {'br': br, 'spisan': spisan, 'id': id, 'title': title})
     else:
         return redirect('user_login')
@@ -643,6 +645,111 @@ def report_prbo(request):
     else:
         return redirect('user_login')
 
+@csrf_exempt
+def report_inventory(request):
+    if request.user.is_authenticated:
+
+        choice = request.POST['dropdown']
+        branch = request.POST['dropdown2']
+
+        if choice != '0':
+            t = type_id.objects.get(type_id=choice)
+            type = t.type
+        else:
+            type = 'общая'
+
+        if branch == '0':
+            branch_name = 'Все'
+        else:
+            br = branch_id.objects.get(branch_id=branch)
+            branch_name = br.name
+
+        file_name = 'Ведомость '+ type + '.' + branch_name + '.Инвентаризация'
+        file_name = translit(file_name, "ru", reversed=True)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = "attachment; filename={}.xlsx".format(file_name)
+        context = {
+            'in_memory': True,
+            'remove_timezone': True
+        }
+        workbook = xlsxwriter.Workbook(response, context)
+        worksheet = workbook.add_worksheet()
+        worksheet.set_column('A:A', 15)
+        worksheet.set_column('B:B', 15)
+        worksheet.set_column('C:C', 25)
+        worksheet.set_column('D:D', 15)
+        worksheet.set_column('E:E', 15)
+        worksheet.set_column('F:F', 15)
+        worksheet.set_column('G:G', 15)
+        worksheet.set_column('H:H', 15)
+        worksheet.set_column('I:I', 15)
+        worksheet.set_column('J:J', 15)
+        style_align_center = workbook.add_format({'align': 'center', 'bold': True, 'font_size': 11})
+        style_align_center_border = workbook.add_format({'align': 'center', 'bold': True, 'border': 1, 'text_wrap': True})
+        worksheet.merge_range('A1:I1', 'Ведомость '+ str(type), style_align_center)
+        format2 = workbook.add_format({'num_format': 'dd-mm-yy', 'border': 1, 'align': 'center'})
+        format1 = workbook.add_format({'border': 1, 'align': 'center'})
+        format3 = workbook.add_format({'align': 'center', 'border': 1, 'text_wrap': True})
+        format4 = workbook.add_format({'align': 'center', 'bold': True})
+        format5 = workbook.add_format({'align': 'center'})
+        #worksheet.write('A1', 'Ведомость амортизации '+type_name+' за '+str(date_month)+' '+str(date_year)+'', style_align_center)
+        worksheet.write('A3', 'Дата ввода в эксплуатацию', style_align_center_border)
+        worksheet.write('B3', 'Инвентарный номер', style_align_center_border)
+        worksheet.write('C3', 'Наименование', style_align_center_border)
+        worksheet.write('D3', 'Срок полезной службы', style_align_center_border)
+        worksheet.write('E3', 'Остаток срока службы', style_align_center_border)
+        worksheet.write('F3', 'Ежемесячная норма амортизации', style_align_center_border)
+        worksheet.write('G3', 'Первоначальная стоимость', style_align_center_border)
+        worksheet.write('H3', 'Накопленная амортизация', style_align_center_border)
+        worksheet.write('I3', 'Остаточная стоимость', style_align_center_border)
+        worksheet.write('J3', 'Сотрудник', style_align_center_border)
+        rows = 3
+        col=0
+        summa_amort_sum_month = 0
+        summa_bal_price = 0
+        summa_amort_sum = 0
+        summa_ost_sum = 0
+        i=0
+
+        if choice == '0':
+            main = main_t.objects.filter(date_spisan=None)
+        else:
+            main = main_t.objects.filter(type_id=choice, branch_id=branch, date_spisan=None)
+            print(main)
+
+        for m in main:
+            if len(str(m.inv)) < 8:
+                inv = '{:08}'.format(m.inv)
+            else:
+                inv = m.inv
+            if m.type_id != 1:
+                ostatok_sroka_new = round((m.bal_price - m.amort_sum) / m.amort_sum_month)
+                ost_sum = round(m.bal_price - m.amort_sum,2)
+            else:
+                ostatok_sroka_new = 0
+                ost_sum = 0
+
+            employee = employee_id.objects.get(emp_id=m.emp_id)
+            employee_name = employee.surname + ' ' + employee.name[0] + '.' + employee.lastname[0]
+
+            worksheet.write(rows,col,m.date_vvod, format2)
+            worksheet.write(rows,col+1,inv, format1)
+            worksheet.write(rows,col+2,m.name, format3)
+            worksheet.write(rows,col+3,m.amort_month, format1)
+            worksheet.write(rows,col+4,ostatok_sroka_new, format1)
+            worksheet.write(rows,col+5,round(m.amort_sum_month,2), format1)
+            worksheet.write(rows,col+6,m.bal_price, format1)
+            worksheet.write(rows,col+7,round(m.amort_sum,2), format1)
+            worksheet.write(rows,col+8,ost_sum, format1)
+            worksheet.write(rows,col+9,employee_name, format1)
+            rows=rows+1
+        workbook.close()
+
+    #return render(request, 'main_os/report.html', {'i':i, 'a_id': a_id, 'c': choice})
+        return response
+    else:
+        return redirect('user_login')
+
 def ch_bal_price(request):
     if request.user.is_authenticated:
         return render(request, 'main_os/ch_bal_price.html')
@@ -794,9 +901,9 @@ def union_list(request, s, main, t):
         r = r + 1
 
     caption = t.type
-    paginator = Paginator(m, 30)
-    page = request.GET.get('page')
-    m = paginator.get_page(page)
+    # paginator = Paginator(m, 30)
+    # page = request.GET.get('page')
+    # m = paginator.get_page(page)
 
     return render(request, 'main_os/list.html', {'m':m, 'sum_ost_sum': sum_ost_sum,
             'sum_amort_sum': sum_amort_sum, 'sum_bal_price': sum_bal_price, 'sum_amort_sum_month': sum_amort_sum_month, 'caption': caption})
@@ -1083,8 +1190,11 @@ def employee_change(request, id):
             emp_lastname = request.GET.get('change_lastname')
             emp_id = id
             dep_id = request.GET.get('dropdown')
+            branch = request.GET.get('dropdown2')
+            branch_instance = branch_id.objects.get(branch_id=branch)
             emp_depart_id = dep_id
             e = employee_id.objects.get(emp_id=emp_id)
+            e.branch_id = branch_instance
             e.depart_id  = dep_id
             e.surname = emp_surname
             e.name = emp_name
@@ -1103,9 +1213,10 @@ def employee_change(request, id):
         dep_name = dep.name
         dep_id = dep.depart_id
         departs = depart.objects.all()
+        branch = branch_id.objects.all()
         flag = 1
         return render(request, 'main_os/employee_change_template.html', {'emp_surname': emp_surname, 'emp_name': emp_name, 'emp_lastname': emp_lastname,
-                    'emp_id': emp_id, 'dep_name': dep_name, 'dep_id': dep_id, 'departs': departs, 'message': message, 'flag': flag})
+                    'emp_id': emp_id, 'dep_name': dep_name, 'dep_id': dep_id, 'departs': departs, 'branch': branch, 'message': message, 'flag': flag})
     else:
         return redirect('user_login')
 
@@ -1121,6 +1232,7 @@ def directory_list_add(request, id):
                     if employee_id.objects.filter(surname=surname, name=name, lastname=lastname).exists():
                         message = 'Сотрудник с таким ФИО уже существует'
                     else:
+                        branch = request.POST['dropdown2']
                         dep = request.POST['dropdown']
                         e = employee_id.objects.order_by('-emp_id')[0]
                         emp = employee_id()
@@ -1128,6 +1240,8 @@ def directory_list_add(request, id):
                         emp.name = str(name)
                         emp.lastname = str(lastname)
                         emp.emp_id = e.emp_id + 1
+                        branch_instance = branch_id.objects.get(branch_id=branch)
+                        emp.branch_id = branch_instance
                         emp.depart_id = dep
                         emp.active = 1
                         emp.save()
@@ -1136,10 +1250,13 @@ def directory_list_add(request, id):
                     message = 'Добавление нового сотрудника:'
             if id == 2:
                 if request.method == 'POST':
+                    branch = request.POST['dropdown2']
+                    branch_instance = branch_id.objects.get(branch_id=branch)
                     name = request.POST['add_depart']
                     d = depart.objects.order_by('-depart_id')[0]
                     dep = depart()
                     dep.name = name
+                    dep.branch_id = branch_instance
                     dep.depart_id = d.depart_id + 1
                     dep.save()
                     message = str(name)+' добавлен'
@@ -1157,7 +1274,8 @@ def directory_list_add(request, id):
                 else:
                     message = 'Добавление новой точки обслуживания:'
             departs = depart.objects.all()
-            return  render(request, 'main_os/directory_list_add_template.html', {'message': message, 'departs': departs,'id': id})
+            branch = branch_id.objects.all()
+            return  render(request, 'main_os/directory_list_add_template.html', {'message': message, 'departs': departs,'id': id, 'branch': branch})
     else:
         return redirect('user_login')
 
@@ -1166,16 +1284,20 @@ def depart_change(request, id):
         flag = 2
         try:
             dep_name = request.GET['change_dep_name']
+            branch = request.GET.get('dropdown2')
+            branch_instance = branch_id.objects.get(branch_id=branch)
             dep = depart.objects.get(depart_id=id)
+            dep.branch_id = branch_instance
             dep.name = dep_name
             dep.save()
             message = 'Изменения сохранены'
         except:
+            branch = branch_id.objects.all()
             dep = depart.objects.get(depart_id=id)
             dep_name = dep.name
             dep_id = id
             message = ''
-        return  render(request, 'main_os/employee_change_template.html', {'dep_name':dep_name, 'id': id, 'flag': flag, 'message': message})
+        return  render(request, 'main_os/employee_change_template.html', {'dep_name':dep_name, 'id': id, 'flag': flag, 'message': message, 'branch': branch})
     else:
         return redirect('user_login')
 
@@ -1289,3 +1411,14 @@ def invoice_pdf(request, invoice_number):
         return result
     else:
         return redirect('user_login')
+
+def change_branch_id(request):
+    employee = employee_id.objects.filter(~Q(active=0))
+    for emp in employee:
+        branch = branch_id.objects.get(name=emp.branch_id)
+        branch_instance = branch.branch_id
+        equipment = main_t.objects.filter(emp_id=emp.emp_id)
+        for e in equipment:
+            e.branch_id = branch_instance
+            e.save()
+    print('OK')

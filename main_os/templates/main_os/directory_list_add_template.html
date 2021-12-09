@@ -10,6 +10,12 @@
       <p>Фамилия:  <input type="text" name="add_surname" class="btn-css"></p>
       <p>Имя:      <input type="text" name="add_name" class="btn-css"></p>
       <p>Отчество: <input type="text" name="add_lastname" class="btn-css"></p>
+      <p>Офис/Точка обслуживания:<Br>
+        <select name="dropdown2" class="select-css">
+          {% for b in branch %}
+        <option value="{{ b.branch_id }}">{{ b.name }}</option>
+        {% endfor %}
+        </select></p>
       <p>Отделение/Подразделение:<Br>
         <select name="dropdown" class="select-css">
           {% for d in departs %}
@@ -22,6 +28,12 @@
     {% if id == 2 %}
     <form action="{% url 'directory_list_add' 2 %}" method="post">
       {% csrf_token %}
+      <p>Офис/Точка обслуживания:<Br>
+      <select name="dropdown2" class="select-css">
+        {% for b in branch %}
+      <option value="{{ b.branch_id }}">{{ b.name }}</option>
+      {% endfor %}
+      </select></p>
       <p>Название:  <input type="text" name="add_depart" class="btn-css"></p>
       <p><button type="submit" class="btn-css">Добавить</button></p></form>
     <a class="btn-css" href="{% url 'directory_list' 2 %}">Вернуться к списку подразделений</a>

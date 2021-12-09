@@ -82,6 +82,7 @@ class branch_id(models.Model):
         return self.name
 
 class depart(models.Model):
+    branch_id = models.ForeignKey(branch_id, on_delete=models.CASCADE, default=1)
     depart_id = models.IntegerField()
     name = models.CharField(max_length=120)
 
@@ -90,6 +91,7 @@ class depart(models.Model):
 
 class employee_id(models.Model):
     emp_id = models.IntegerField()
+    branch_id = models.ForeignKey(branch_id, on_delete=models.CASCADE, default=1)
     depart_id = models.IntegerField(null=True)
     name = models.CharField(max_length=60)
     surname = models.CharField(max_length=60, null=True)

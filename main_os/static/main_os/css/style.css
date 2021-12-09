@@ -224,6 +224,7 @@ nav {
   border-radius: 0 0 3px 3px;
   -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.04);
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.04);
+  z-index: 100;
 }
 .dropdown ul.large {
   min-width: 200px;

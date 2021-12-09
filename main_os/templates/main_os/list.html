@@ -4,13 +4,14 @@
 {% load main_os_tags %}
 {% block content %}
     <title>Основные средства</title>
-  <div class="container">
-  <form action="{% url 'search' %}" method="get">
+<div class="container1" style="margin-left:5%; margin-right:5%; position: relative;">
+  <!-- <form action="{% url 'search' %}" method="get">
       <input type="text "placeholder="" name="search" class="btn-css" required>
       <button type="submit" class="btn-css">Поиск</button>
-    </form><br>
-  <table class="table1">
+    </form><br> -->
+  <table id="sortTable" class="table-striped" style="font-size: 14px;">
    <caption1>{{ caption }}</caption1>
+   <thead>
    <tr>
     <th>Дата приобретения</th>
     <th>Инвентарный номер</th>
@@ -27,7 +28,8 @@
     <th>Дата списания/реализации</th>
     <!--<th>Сотрудник</th>-->
    </tr>
-
+   </thead>
+   <tbody>
    {{ s }}
    {% for i in m  %}
    <tr><td>{{ i.0 }}</td><td>{{ i.1 }}</td><td>{{ i.2 }}</td><td>{{ i.3 }}</td><td>{{ i.4 }}</td>
@@ -37,11 +39,12 @@
    <td>{{ i.bal_price|floatformat:2 }}</td><td>{{ i.amort_sum|floatformat:2 }}</td><td></td><td></td><td></td><td></td><td></td></tr>-->
    {% endfor %}
 
-   {% if m.has_next %}
+   <!-- {% if m.has_next %}
    {% else %}
    <tr><td></td><td></td><td></td><td></td><td>{{ sum_amort_sum_month }}</td>
    <td>{{ sum_bal_price }}</td><td>{{ sum_amort_sum }}</td><td>{{ sum_ost_sum }}</td><td></td><td></td></tr>
    {% endif %}
+   </tbody>
    </table>
 
    {% if m.paginator.num_pages > 1 %}
@@ -71,6 +74,6 @@
 
    {% endif %}
 
-    <p><span> Страница {{ m.number }} из {{ m.paginator.num_pages }} </span></p>
+    <p><span> Страница {{ m.number }} из {{ m.paginator.num_pages }} </span></p> -->
 </div>
 {% endblock %}

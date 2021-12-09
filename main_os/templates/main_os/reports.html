@@ -96,4 +96,28 @@
       </form></div>
       {% endif %}
 
+      {% if id == 5 %}
+        <form action="report_inventory" method="post">
+          {% csrf_token %}
+            <p>Вид основных средств:<Br>
+            <select name="dropdown" class="select-css">
+                <option value="2">Мебель</option>
+                <option value="3">Компьютерное оборудование</option>
+                <option value="4">Транспорт</option>
+                <option value="5">Капиталовложение</option>
+                <option value="6">Нематериальные активы</option>
+                <option value="7">Оборудование</option>
+                <option value="8">Здания</option>
+              </select>
+              <p>Отделение/Подразделение:<Br>
+                <select name="dropdown2" class="select-css">
+                  <option value="0">Все</option>
+                  <option value="1">Головной офис</option>
+                  <option value="5">Токмокское представительство</option>
+                  <option value="6">точка в г.Карабалта</option>
+                </select></p>
+              <button type="submit" class="btn-css">Сформировать</button>
+            </form>
+          {% endif %}
+
 {% endblock %}

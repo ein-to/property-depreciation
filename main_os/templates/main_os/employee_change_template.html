@@ -10,6 +10,12 @@
       <p><input type="text" value="{{ emp_surname }}" name="change_surname" class="btn-css"></p>
       <p><input type="text" value="{{ emp_name }}" name="change_name" class="btn-css"></p>
       <p><input type="text" value="{{ emp_lastname }}" name="change_lastname" class="btn-css"></p>
+      <p>Офис/Точка обслуживания:<Br>
+        <select name="dropdown2" class="select-css">
+          {% for b in branch %}
+        <option value="{{ b.branch_id }}">{{ b.name }}</option>
+        {% endfor %}
+        </select></p>
       <p>Отделение/Подразделение:<Br>
         <select name="dropdown" class="select-css">
           <option selected value="{{ dep_id }}">{{ dep_name }}</option>
@@ -23,6 +29,12 @@
       {% if flag == 2 %}
       <h4>{{ message }}</h4><Br>
     <form action="{% url 'depart_change' id %}" method="get">
+      <p>Офис/Точка обслуживания:<Br>
+        <select name="dropdown2" class="select-css">
+          {% for b in branch %}
+        <option value="{{ b.branch_id }}">{{ b.name }}</option>
+        {% endfor %}
+        </select></p>
       <p><input type="text" value="{{ dep_name }}" name="change_dep_name" class="btn-css"></p>
       <p><button type="submit" class="btn-css">Сохранить</button></p></form>
       <a class="btn-css" href="{% url 'directory_list' id=2 %}">Вернуться к списку подразделений</a>

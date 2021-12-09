@@ -29,6 +29,7 @@ urlpatterns = [
     path('reports/report_spis_real', views.report_spis_real, name='report_spis_real'),
     path('reports/report_general', views.report_general, name='report_general'),
     path('reports/report_prbo', views.report_prbo, name='report_prbo'),
+    path('reports/report_inventory', views.report_inventory, name='report_inventory'),
     path('ch_bal_price/', views.ch_bal_price, name='ch_bal_price'),
     path('ch_bal_price/change_bal_price_def', views.change_bal_price_def, name='change_bal_price_def'),
     path('mbp/', views.mbp, name='mbp'),
@@ -60,4 +61,5 @@ urlpatterns = [
     path('invoice/', views.invoice, name='invoice'),
     path('invoice_detail/<int:invoice_number>', views.invoice_detail, name='invoice_detail'),
     path('invoice_pdf/<int:invoice_number>', views.invoice_pdf, name='invoice_pdf'),
+    path('change_branch_id', views.change_branch_id, name='change_branch_id'),
 ]

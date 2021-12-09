@@ -16,7 +16,10 @@ def add_zeros_inv(value):
 def get_name(value):
     if value != 1:
         emp = employee_id.objects.get(emp_id=value)
-        name = emp.surname+' '+emp.name[0]+'.'+emp.lastname[0]
+        if emp.lastname != '':
+            name = emp.surname + ' ' + emp.name[0] + '.' + emp.lastname[0] +'.'
+        else:
+            name = emp.surname + ' ' + emp.name[0] + '.'
     if value == 1:
         name = 'Склад'
     if value == 682:
